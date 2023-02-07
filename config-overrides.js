@@ -1,16 +1,20 @@
 const path = require('path')
-const { 
-  override,
-
- } = require('customize-cra')
+const { override, addWebpackAlias } = require('customize-cra')
 
 module.exports = {
   // The Webpack config to use when compiling your react app for development or production.
-  webpack: function (config, env) {
-    // ...add your webpack config
-    console.log("========== WEBPACK ==========\n", config)
-    return config;
-  },
+  // webpack: function (config, env) {
+  //   // ...add your webpack config
+  //   console.log("========== WEBPACK ==========\n", config)
+  //   return config;
+  // },
+  webpack: override(
+    addWebpackAlias({
+      '@': path.resolve(__dirname, '/src'),
+      components: path.resolve(__dirname, 'src/components'),
+      layout: path.resolve(__dirname, 'src/layout')
+    })
+  ),
   // The Jest config to use when running your jest tests - note that the normal rewires do not
   // work here.
   jest: function (config) {
@@ -44,21 +48,25 @@ module.exports = {
       // Change the https certificate options to match your certificate, using the .env file to
       // set the file paths & passphrase.
       const fs = require('fs');
-      config.https = {
-        key: fs.readFileSync(process.env.REACT_HTTPS_KEY, 'utf8'),
-        cert: fs.readFileSync(process.env.REACT_HTTPS_CERT, 'utf8'),
-        ca: fs.readFileSync(process.env.REACT_HTTPS_CA, 'utf8'),
-        passphrase: process.env.REACT_HTTPS_PASS
-      };
+      // config.https = {
+      //   key: fs.readFileSync(process.env.REACT_HTTPS_KEY, 'utf8'),
+      //   cert: fs.readFileSync(process.env.REACT_HTTPS_CERT, 'utf8'),
+      //   ca: fs.readFileSync(process.env.REACT_HTTPS_CA, 'utf8'),
+      //   passphrase: process.env.REACT_HTTPS_PASS
+      // };
 
       // Return your customised Webpack Development Server config.
       return config;
     };
   },
   // The paths config to use when compiling your react app for development or production.
-  paths: function (paths, env) {
-    // ...add your paths config
+  // paths: function (paths, env) {
+  //   // ...add your paths config
+  //   console.log("========== PATHS ==========\n", paths)
+  //   return paths;
+  // },
+  paths: override((paths, env) => {
     console.log("========== PATHS ==========\n", paths)
-    return paths;
-  },
+    return paths
+  })
 }
